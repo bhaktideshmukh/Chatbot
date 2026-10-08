@@ -1,14 +1,16 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Depends
 from pydantic import BaseModel
-from typing import Optional
+from sqlalchemy.orm import Session
 
 # Import our custom logic
-from backend.auth import authenticate_user, LoginRequest, UserResponse
+from backend.database import get_db, User
+from backend.auth import authenticate_user, LoginRequest, TokenResponse, get_password_hash
 from backend.rag_engine import get_answer
 
 app = FastAPI(title="RBAC Enterprise Chatbot API")
 
-# Pydantic models for the /chat endpoint
+
+
 class ChatRequest(BaseModel):
     query: str
     role: str
@@ -17,15 +19,15 @@ class ChatRequest(BaseModel):
 class ChatResponse(BaseModel):
     answer: str
 
-@app.post("/login", response_model=UserResponse)
-def login(request: LoginRequest):
+@app.post("/login", response_model=TokenResponse)
+def login(request: LoginRequest, db: Session = Depends(get_db)):
     """
-    Endpoint for users to log in. Returns their role if successful.
+    Endpoint for users to log in. Returns JWT token and role if successful.
     """
-    user = authenticate_user(request)
-    if not user:
+    user_token = authenticate_user(db, request)
+    if not user_token:
         raise HTTPException(status_code=401, detail="Invalid username or password")
-    return user
+    return user_token
 
 @app.post("/chat", response_model=ChatResponse)
 def chat(request: ChatRequest):

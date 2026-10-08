@@ -7,3 +7,7 @@ chromadb
 python-jose
 pydantic
 python-dotenv
+sqlalchemy
+passlib
+bcrypt==4.0.1
+psycopg2-binary

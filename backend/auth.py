@@ -1,38 +1,50 @@
 from pydantic import BaseModel
 from typing import Optional
+from datetime import datetime, timedelta, timezone
+from jose import jwt
+from passlib.context import CryptContext
+from sqlalchemy.orm import Session
+from backend.database import User
+import os
 
-# Pydantic models to validate our incoming data
+SECRET_KEY = os.getenv("SECRET_KEY", "your-super-secret-jwt-key")
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 60
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
 class LoginRequest(BaseModel):
     username: str
     password: str
 
-class UserResponse(BaseModel):
-    username: str
+class TokenResponse(BaseModel):
+    access_token: str
+    token_type: str
     role: str
-    message: str
+    username: str
 
-# Our Dummy Database
-# Notice the roles exactly match the folder names in backend/data
-users_db = {
-    "peter": {"password": "password123", "role": "finance"},
-    "sarah": {"password": "password123", "role": "hr"},
-    "john": {"password": "password123", "role": "marketing"},
-    "alice": {"password": "password123", "role": "engineering"},
-    "boss": {"password": "boss123", "role": "c-level"},
-    "intern": {"password": "password123", "role": "general"}
-}
+def verify_password(plain_password, hashed_password):
+    return pwd_context.verify(plain_password, hashed_password)
 
-def authenticate_user(login_data: LoginRequest) -> Optional[UserResponse]:
-    """
-    Checks if the user exists and the password matches.
-    Returns a UserResponse with their role if successful, else None.
-    """
-    user = users_db.get(login_data.username)
+def get_password_hash(password):
+    return pwd_context.hash(password)
+
+def create_access_token(data: dict):
+    to_encode = data.copy()
+    expire = datetime.now(timezone.utc) + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    to_encode.update({"exp": expire})
+    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    return encoded_jwt
+
+def authenticate_user(db: Session, login_data: LoginRequest) -> Optional[TokenResponse]:
+    user = db.query(User).filter(User.username == login_data.username).first()
+    if not user or not verify_password(login_data.password, user.hashed_password):
+        return None
     
-    if user and user["password"] == login_data.password:
-        return UserResponse(
-            username=login_data.username, 
-            role=user["role"],
-            message="Login successful!"
-        )
-    return None
+    access_token = create_access_token(data={"sub": user.username, "role": user.role})
+    return TokenResponse(
+        access_token=access_token, 
+        token_type="bearer", 
+        role=user.role, 
+        username=user.username
+    )

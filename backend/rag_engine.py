@@ -9,7 +9,7 @@ from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 load_dotenv()
 
 embeddings = GoogleGenerativeAIEmbeddings(model="models/gemini-embedding-2")
-vectorstore = Chroma(persist_directory="chroma_db2", embedding_function=embeddings)
+vectorstore = Chroma(persist_directory="chroma_db", embedding_function=embeddings)
 llm = ChatGoogleGenerativeAI(model="gemini-3.5-flash", temperature=0.3)
 
 def get_answer(query: str, role: str, chat_history: list) -> str:
