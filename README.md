@@ -10,6 +10,16 @@ This chatbot uses **Google's Gemini AI** to answer questions based on internal c
 - **Multi-Format Document Ingestion:** Recursively processes and embeds Markdown (`.md`), Text (`.txt`), and Data (`.csv`) files.
 - **Google Gemini Integration:** Powered by `gemini-3.5-flash` for high-speed, cost-effective inference and `gemini-embedding-2` for dense vector search.
 
+## 📸 Application Screenshots
+
+<p align="center">
+  <img src="assets/Screenshot%202026-10-09%20171759.png" width="800">
+  <img src="assets/Screenshot%202026-10-09%20171838.png" width="800">
+  <img src="assets/Screenshot%202026-10-09%20172029.png" width="800">
+  <img src="assets/Screenshot%202026-10-09%20172112.png" width="800">
+  <img src="assets/Screenshot%202026-10-09%20172306.png" width="800">
+</p>
+
 ## 🛠️ Tech Stack
 * **Frontend:** Streamlit
 * **Backend:** FastAPI, Pydantic
