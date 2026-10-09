@@ -39,7 +39,8 @@ if "messages" not in st.session_state:
 
 # --- LOGIN SCREEN ---
 if st.session_state.user is None:
-    st.markdown("<h1 class='main-header'>🔒 Enterprise RBAC Portal</h1>", unsafe_allow_html=True)
+    st.markdown("<h1 class='main-header'>🔒 FinSolve Technologies</h1>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: center; color: #64748b; margin-top: -20px; margin-bottom: 30px; font-size: 16px; font-weight: 500;'>Role-Based Access Control Portal</p>", unsafe_allow_html=True)
     
     col1, col2, col3 = st.columns([1, 1.5, 1])
     with col2:

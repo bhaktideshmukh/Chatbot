@@ -1,6 +1,6 @@
-# Enterprise RBAC AI Chatbot 🤖
+# FinSolve Technologies - RBAC AI Chatbot 🤖
 
-An enterprise-grade Retrieval-Augmented Generation (RAG) chatbot built with **FastAPI**, **Streamlit**, and **LangChain**. 
+An enterprise-grade Retrieval-Augmented Generation (RAG) chatbot built with **FastAPI**, **Streamlit**, and **LangChain** for FinSolve Technologies. 
 
 This chatbot uses **Google's Gemini AI** to answer questions based on internal company documents. What makes this chatbot special is its **Role-Based Access Control (RBAC)**—it dynamically filters the vector database to ensure that employees can *only* query documents that they have the authorization to see based on their department.
 
