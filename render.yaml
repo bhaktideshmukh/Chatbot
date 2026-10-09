@@ -1,0 +1,23 @@
+services:
+  # 1. Backend Service (FastAPI)
+  - type: web
+    name: finsolve-backend
+    env: docker
+    dockerfilePath: ./Dockerfile.backend
+    envVars:
+      - key: GOOGLE_API_KEY
+        sync: false
+      - key: SECRET_KEY
+        generateValue: true
+
+  # 2. Frontend Service (Streamlit)
+  - type: web
+    name: finsolve-frontend
+    env: docker
+    dockerfilePath: ./Dockerfile.frontend
+    envVars:
+      - key: API_URL
+        fromService:
+          type: web
+          name: finsolve-backend
+          envVarKey: RENDER_EXTERNAL_URL
