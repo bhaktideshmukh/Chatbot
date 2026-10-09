@@ -3,6 +3,7 @@ services:
   - type: web
     name: finsolve-backend
     env: docker
+    plan: free
     dockerfilePath: ./Dockerfile.backend
     envVars:
       - key: GOOGLE_API_KEY
@@ -14,6 +15,7 @@ services:
   - type: web
     name: finsolve-frontend
     env: docker
+    plan: free
     dockerfilePath: ./Dockerfile.frontend
     envVars:
       - key: API_URL
