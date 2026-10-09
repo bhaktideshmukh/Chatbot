@@ -11,3 +11,4 @@ sqlalchemy
 passlib
 bcrypt==4.0.1
 psycopg2-binary
+langchain-chroma
