@@ -57,8 +57,19 @@ python -m streamlit run frontend/app.py
 
 ---
 
-## 🔐 Demo Accounts
-To test the Role-Based Access Control, use the following dummy credentials (passwords are all `password123` unless specified):
+## 🔐 User Authentication & Setup
+
+Because this is FinSolve Technologies' internal portal, employee data and roles are assumed to already exist securely in a corporate database. 
+
+**For Local Development & Testing:** 
+We use the `create_users.py` script to generate a local SQLite database (`chatbot.db`) and inject dummy users. This allows you to test the Role-Based Access Control without connecting to the production database.
+
+Run the script to populate the local database:
+```bash
+python create_users.py
+```
+
+The script sets up the following dummy credentials (passwords are all `password123` unless specified):
 
 | Username | Role | Access Level |
 | :--- | :--- | :--- |
@@ -70,3 +81,6 @@ To test the Role-Based Access Control, use the following dummy credentials (pass
 | `intern` | General | Only General company policies |
 
 *Try logging in as `peter` and asking about HR salaries. The bot will automatically block the query and state that it doesn't have the context to answer it!*
+
+**Production Environment (Real Users):**
+In a true production environment where hardcoded users don't exist, this application integrates directly into the company's existing identity provider (IdP). Authentication would be handled via **Single Sign-On (SSO)** using protocols like OAuth2.0, OpenID Connect (OIDC), or SAML against systems like **Microsoft Active Directory (Azure AD)**, Okta, or Google Workspace. When a real employee logs in via SSO, the IdP returns their verified corporate identity and active directory group/role (e.g., `Group: Finance`), which our FastAPI backend then decodes to assign RBAC permissions for the RAG engine.
